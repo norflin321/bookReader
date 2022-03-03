@@ -17,7 +17,7 @@ import Epub from 'epubjs';
 
 export const RenderBook = () => {
   const [state, setState] = useState<{serverUrl: string; fileName: string}>();
-  const [pagesContent, setPagesContent] = useState<any[]>();
+  const [pageContent, setPageContent] = useState<string>();
 
   const onPress = useCallback(() => {
     (async () => {
@@ -61,28 +61,31 @@ export const RenderBook = () => {
         await book.ready.then(d => d);
         // const metadata = await book.loaded.metadata.then(d => d);
         console.log('- book:', book);
-        book.loaded.spine
-          .then(async spine => {
-            // console.log(spine, typeof spine);
-            const contents = [];
-            // @ts-ignore
-            for (const item of spine.spineItems) {
-              // console.log('item:', item);
-              const content = await item
-                .load(book.load.bind(book))
-                .then((d: any) => d);
-              contents.push(content);
-            }
-            setPagesContent(contents);
-          })
-          .catch(err => console.log('err:', err));
+        const locations = await book.locations.generate(100);
+        console.log(locations);
+        book.getRange(locations[0]).then(range => {
+          console.log('- range:', range);
+          setPageContent(range.startContainer.data.replaceAll('\t', ' '));
+        });
+        // book.loaded.spine
+        //   .then(async spine => {
+        //     // console.log(spine, typeof spine);
+        //     const contents = [];
+        //     // @ts-ignore
+        //     for (const item of spine.spineItems) {
+        //       // console.log('item:', item);
+        //       const content = await item
+        //         .load(book.load.bind(book))
+        //         .then((d: any) => d);
+        //       const text: string = content.textContent;
+        //       contents.push(text.replaceAll('\t', ' '));
+        //     }
+        //     setPagesContent(contents);
+        //   })
+        //   .catch(err => console.log('err:', err));
       }
     })();
   }, [state]);
-
-  useEffect(() => {
-    console.log(pagesContent);
-  }, [pagesContent]);
 
   return (
     <View style={styles.container}>
@@ -92,9 +95,7 @@ export const RenderBook = () => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollViewContent}>
-        {pagesContent && (
-          <Text style={styles.text}>{pagesContent[1].textContent}</Text>
-        )}
+        {pageContent && <Text style={styles.text}>{pageContent}</Text>}
       </ScrollView>
     </View>
   );
