@@ -33,3 +33,11 @@ export const Shadow = {
   shadowRadius: 1.0,
   elevation: 1,
 };
+
+export const chunkBy = (arr: any[], chunkSize: number): any[] => {
+  return [].concat.apply(
+    [],
+    // @ts-ignore
+    arr.map((_, i) => (i % chunkSize ? [] : [arr.slice(i, i + chunkSize)])),
+  );
+};

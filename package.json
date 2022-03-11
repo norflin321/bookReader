@@ -13,6 +13,7 @@
   "dependencies": {
     "@types/react-native-fs": "^2.13.0",
     "@types/rn-fetch-blob": "^1.2.3",
+    "cheerio": "^1.0.0-rc.10",
     "epubjs": "^0.3.93",
     "jszip": "^3.7.1",
     "react": "17.0.2",
@@ -20,6 +21,7 @@
     "react-native-document-picker": "^8.0.0",
     "react-native-fs": "^2.19.0",
     "react-native-linear-gradient": "^2.5.6",
+    "react-native-render-html": "^6.3.4",
     "react-native-static-server": "^0.5.0",
     "react-native-webview": "^11.17.2",
     "react-native-zip-archive": "^6.0.6",
