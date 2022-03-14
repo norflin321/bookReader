@@ -1,12 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
-import {
-  Dimensions,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import StaticServer from 'react-native-static-server';
 import DocumentPicker from 'react-native-document-picker';
@@ -15,7 +8,7 @@ import Epub from 'epubjs';
 import {unzip} from 'react-native-zip-archive';
 import cheerio from 'cheerio';
 
-import {chunkBy, Fonts} from '../utils';
+import {Fonts} from '../utils';
 import {Btn} from './button';
 import {TServerState} from '../types';
 
@@ -128,13 +121,14 @@ export const RenderBook = () => {
               chapters.push({section, el, html, tags});
             }
 
-            // create lines
             let maxLineLength = (WINDOW_SIZE - PADDING) / (FONT_SIZE / 2);
             maxLineLength = Math.round(maxLineLength);
             console.log('FONT_SIZE:', FONT_SIZE);
             console.log('WINDOW_SIZE:', WINDOW_SIZE);
             console.log('PADDING:', PADDING);
             console.log('maxLineLength:', maxLineLength);
+
+            // create lines of content
             const lines = [];
             for (const chapter of chapters) {
               console.log('chapter:', chapter);
@@ -167,9 +161,9 @@ export const RenderBook = () => {
                 }
               }
             }
-            const pages = chunkBy(lines, 30);
-            console.log('pages:', pages);
-            setPagesWithContent(pages);
+
+            // save data
+            console.log('lines:', lines);
           })
           .catch(err => console.log('err:', err));
       }
@@ -230,24 +224,6 @@ export const RenderBook = () => {
             ),
           )}
       </ScrollView>
-      <View style={styles.pageControlBtnsContainer}>
-        <Btn
-          title="<"
-          style={styles.pageControlBtn}
-          onPress={() => {
-            if (page > 0) {
-              setPage(p => p - 1);
-            }
-          }}
-        />
-        <Btn
-          title=">"
-          style={styles.pageControlBtn}
-          onPress={() => {
-            setPage(p => p + 1);
-          }}
-        />
-      </View>
     </View>
   );
 };
